@@ -3,6 +3,8 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
+color_ls = ["#e056fd", "#434343", "#e84393", "#5e5368"]
+
 matches = pd.read_csv(r'E:\5th_sem_proj\ipl_dashboard\matches.csv')
 
 matches.replace(to_replace=['Delhi Daredevils'], value=['Delhi Capitals'], inplace=True)
@@ -25,44 +27,62 @@ dic = {'Sunrisers Hyderabad': 'SRH', 'Kolkata Knight Riders': 'KKR',
 # Replacing names of teams to their short names
 matches_2.replace(dic, inplace=True)
 
-def winningPercentage():
+def winningPercentage(team_1, team_2):
     win_prcntage = (matches_2.winner.value_counts() / (matches_2.team1.value_counts() + matches_2.team2.value_counts())) * 100
     
-    pd.DataFrame({
-        'Team_Name': list(dict(win_prcntage).keys()),
-        'Win %age': list(dict(win_prcntage).values())
+    win_prcntage = pd.DataFrame({
+        'Team_Name': [team_1, team_2],
+        'Win %age': [win_prcntage[team_1], win_prcntage[team_2]]
     })
     
-    win_prcntage = win_prcntage.to_frame().reset_index().rename(columns={'index': 'Team_Name', 0: 'Win %age'})
-    win_prcntage.sort_values(by='Win %age', ascending=False, inplace=True)
-    
-    fig = px.bar(win_prcntage, x = 'Team_Name', y = 'Win %age')
+    fig = px.pie(win_prcntage, names='Team_Name', values='Win %age', hole=0.3,
+                 color="Team_Name", color_discrete_map={team_1: "#e84393", team_2: "#434343"})
     return fig
 
 
-def team_in_most_season():
-    lis = matches_2.team1.unique()
-    dic = {}
+def team_in_most_season(team_1, team_2):
+    series_1 = matches_2.loc[matches_2["team1"] == team_1].season.value_counts()
+    series_2 = matches_2.loc[matches_2["team1"] == team_2].season.value_counts()
     
-    for values in lis:
-        dic[values] = 0
+    df1 = pd.DataFrame({
+        "Team_name": [team_1 for i in range(len(list(series_1.keys())))],
+        "Season": list(series_1.keys()),
+        "Match Count": list(dict(series_1).values()),
+    })
     
-    for season_no in matches_2.groupby('season'):
-        for team in dic:
-            if team in season_no[1].team1.unique():
-                dic[team] += 1
+    df2 = pd.DataFrame({
+        "Team_name": [team_2 for i in range(len(list(series_2.keys())))],
+        "Season": list(series_2.keys()),
+        "Match Count": list(dict(series_2).values()),
+    })
     
-    team_vs_seasons = pd.DataFrame(dic.items()).rename(columns={0: 'Team Name', 1: 'Season Count'})
-    team_vs_seasons.sort_values(by='Season Count', ascending=False, inplace=True)
+    df = pd.concat([df1, df2], ignore_index=True)
     
-    fig = px.pie(team_vs_seasons, names='Team Name', values='Season Count')
+    fig = px.histogram(df, x='Season', y='Match Count', color="Team_name",
+                       barmode="group", color_discrete_map={team_1: "#55efc4", team_2: "#e84393"})
     
     return fig
 
-def player_match_season():
-    m_of_m_count = matches['player_of_match'].value_counts().head(15).to_frame().reset_index().rename(columns={'index': 'player_name', 'player_of_match': 'count'})
+def player_match_season(team_1, team_2):
+    series_1 = matches_2.loc[matches_2["team1"] == team_1].player_of_match.value_counts()[:5]
+    series_2 = matches_2.loc[matches_2["team1"] == team_2].player_of_match.value_counts()[:5]
     
-    fig = px.bar(m_of_m_count, x = 'player_name', y = 'count')
+    df1 = pd.DataFrame({
+        "Team_name": [team_1 for i in range(len(list(series_1.keys())))],
+        "Player Name": list(series_1.keys()),
+        "Match Count": list(dict(series_1).values()),
+    })
+    
+    df2 = pd.DataFrame({
+        "Team_name": [team_2 for i in range(len(list(series_2.keys())))],
+        "Player Name": list(series_2.keys()),
+        "Match Count": list(dict(series_2).values()),
+    })
+    
+    df = pd.concat([df1, df2], ignore_index=True)
+    
+    fig = px.histogram(df, x='Player Name', y='Match Count', color="Team_name",
+                       barmode="group", color_discrete_map={team_1: "#55efc4", team_2: "#e84393"})
     
     return fig
 
@@ -74,31 +94,13 @@ dic = {'Sunrisers Hyderabad': 'SRH', 'Kolkata Knight Riders': 'KKR',
         }
 matches.replace(dic, inplace=True)
 
-def key_players(team_name):
-    for value in matches.groupby('winner'):
-        if value[0] == team_name:
-            return value[1]['player_of_match'].value_counts().head()
-
-def key_player_team(team_name):
-    df = key_players(team_name).to_frame().reset_index().rename(columns={'index': 'Player', 'player_of_match': 'Count'})
-    
-    fig = px.bar(df, x='Player', y='Count')
-    
-    return fig
-
 def win_visu_by_toss(team_name):
     datas = matches[(matches['toss_winner']==team_name) & (matches['winner']==team_name)]
     count = datas['toss_decision'].value_counts()
     win_bat = count['bat']/(count['field']+count['bat'])*100
     win_field = count['field']/(count['bat']+count['field'])*100
-    print("field_count = "+ str(count['field']))
-    print("bat_count = " + str(count['bat']))
-    print("Win %age if fielding is choosen = " + str(win_field))
-    print("Win %age if batting is choosen = " + str(win_bat))
-    print()
-    print()
     data = [['Fielding', win_field], ['Batting', win_bat]]
     data = pd.DataFrame (data,columns=['Decision','Win_%age'])
     
-    fig = px.pie( data , values= 'Win_%age' , names='Decision', title='Win %age For '+ team_name + ' for toss decision',color_discrete_sequence=px.colors.sequential.Rainbow)
+    fig = px.pie(data, values='Win_%age', names='Decision', title=team_name, hole=0.3, color="Decision", color_discrete_map={"Batting": "#e84393", "Fielding": "#434343"})
     return fig
