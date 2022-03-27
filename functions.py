@@ -4,6 +4,7 @@ import plotly.express as px
 color_ls = ["#e056fd", "#434343", "#e84393", "#5e5368"]
 season_ls = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
 
+
 # --------------------------
 #       Section - 1
 #  -------------------------
@@ -41,6 +42,7 @@ class Cleaner:
         names = self.get_short_team_name()
         self.new_df.replace(names, inplace=True)
         self.old_df.replace(names, inplace=True)
+
 
 # -------------------------------
 #          Section - 2
@@ -146,5 +148,40 @@ def win_visu_by_toss(team_name, cleaner_obj, season_ls):
     data = [['Fielding', win_field], ['Batting', win_bat]]
     data = pd.DataFrame (data,columns=['Decision','Win_%age'])
     
-    fig = px.pie(data, values='Win_%age', names='Decision', title=team_name, hole=0.3, color="Decision", color_discrete_map={"Batting": "#e84393", "Fielding": "#434343"})
+    fig = px.pie(data, values='Win_%age',
+                names='Decision',
+                title=team_name,
+                hole=0.3, 
+                color="Decision", 
+                color_discrete_map={"Batting": "#e84393", 
+                                    "Fielding": "#434343"})
     return fig
+
+
+# -------------------------
+#      Section - 3
+# -------------------------
+## Cards to be displayed on top of dashboard
+
+class Cards:
+    def __init__(self, cleaner_obj, season_ls) -> None:
+        self.df = cleaner_obj.new_df
+        self.df = self.df.loc[self.df["season"].isin(season_ls)]
+
+    def total_matches(self, team_name):        
+        matches_num = self.df[(self.df["team1"] == team_name) | (self.df["team2"] == team_name)]
+        return matches_num.shape[0]
+
+    def total_matches_win(self, team_name):        
+        matches_num = self.df[self.df["winner"] == team_name]
+        return len(matches_num)
+
+    def best_season(self, team_name):
+        # consideration of average run rate and chase rate are pending
+        
+        matches_num = self.df[self.df["winner"] == team_name]
+        
+        if (len(matches_num) == 0):
+            return None
+        
+        return matches_num["season"].value_counts().sort_values(ascending = False).keys()[0]
