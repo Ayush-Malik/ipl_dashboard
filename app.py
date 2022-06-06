@@ -54,24 +54,25 @@ components.html(
                      <div class="col-sm-4 col-4" >
                             <div class="card text-white bg-dark border-secondary" style="width: 20rem; left:2.5rem;">
                                    <div class="card-body">
-                                          <h5 class="card-title" style="text-align: center;">Total Matches</h5>
-                                          <p class="card-text" style="font-size:3rem; text-align: center;">""" + str(total_matches_one) + " | " + str(total_matches_second) + """</p>
+                                          <marquee direction='up' behavior='alternate'> <h5 class="card-title" style="text-align: center;">Total Matches</h5> </marquee>
+                                          <p class="card-text" style="font-size:3rem; text-align: center;"><span style="color: #1aa3ff;">""" 
+                                          + str(total_matches_one) + "</span>" + " | " + "<span style='color: #ff471a;'>" + str(total_matches_second) + "</span>" + """</p>
                                    </div>
                             </div>
                      </div>
                      <div class="col-sm-4 col-4">
                             <div class="card text-white bg-dark border-secondary" style="max-width: 20rem; left:2.5rem;">
                                    <div class="card-body">
-                                          <h5 class="card-title" style="text-align: center;">Total Matches Wins</h5>
-                                          <p class="card-text" style="font-size:3rem; text-align: center;">""" + str(total_matches_win_one) + " | " + str(total_matches_win_second) +"""</p>
+                                          <marquee direction='up' behavior='alternate'><h5 class="card-title" style="text-align: center;">Total Matches Wins</h5></marquee>
+                                          <p class="card-text" style="font-size:3rem; text-align: center;"><span style="color: #1aa3ff;">""" + str(total_matches_win_one) + "</span>" + " | " + "<span style='color: #ff471a;'>" + str(total_matches_win_second) + "</span>" +"""</p>
                                    </div>
                             </div>
                      </div>
                      <div class="col-sm-4 col-4">
                             <div class="card text-white bg-dark border-secondary" style="max-width: 20rem; left:2.5rem;">
                                    <div class="card-body">
-                                          <h5 class="card-title" style="text-align: center;">Best Season</h5>
-                                          <p class="card-text" style="font-size:3rem; text-align: center;">"""+ str(best_season_one) + " | " + str(best_season_second) +"""</p>
+                                          <marquee direction='up' behavior='alternate'><h5 class="card-title" style="text-align: center;">Best Season</h5> </marquee>
+                                          <p class="card-text" style="font-size:3rem; text-align: center;"><span style="color: #1aa3ff;">"""+ str(best_season_one) + "</span>" + " | " + "<span style='color: #ff471a;'>" + str(best_season_second) + "</span>" +"""</p>
                                    </div>
                             </div>
                      </div>
@@ -85,7 +86,7 @@ components.html(
 
 # ------------------
 # histogram
-st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Most player of the matches</p>",
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Most  player  of  the  matches</p>",
             unsafe_allow_html=True)
 st.plotly_chart(player_match_season(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
 for i in range(12):
@@ -94,7 +95,7 @@ for i in range(12):
 
 # ---------------------
 # pie
-st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning percentage by toss decision</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning  percentage  by  toss  decision</p>", unsafe_allow_html=True)
 container2 = st.container()
 col3, col4 = st.columns(2)
 
@@ -110,7 +111,7 @@ for i in range(12):
 
 # -----------------
 # histogram plot
-st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Match Count in each Season</p>",
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Match  Count  in  each  Season</p>",
        unsafe_allow_html=True)
 st.plotly_chart(team_in_most_season(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
 
@@ -119,7 +120,7 @@ for i in range(12):
 
 # ---------------
 # Pie Plot
-st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning percentage between both teams</p>",
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning  percentage  between  both  teams</p>",
        unsafe_allow_html=True)
 st.plotly_chart(winningPercentage(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
 st.text("")

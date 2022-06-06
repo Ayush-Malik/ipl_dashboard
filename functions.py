@@ -66,8 +66,8 @@ def winningPercentage(team_1, team_2, cleaner_obj, season_ls):
     fig = px.pie(win_prcntage, names='Team_Name',
                     values='Win %age', hole=0.3,
                     color="Team_Name",
-                    color_discrete_map={team_1: "#e84393",
-                                        team_2: "#434343"},)
+                    color_discrete_map={team_1: "#1aa3ff",
+                                        team_2: "#ff471a"},)
     change_size(fig , 25)
     return fig
 
@@ -96,8 +96,8 @@ def team_in_most_season(team_1, team_2, cleaner_obj, season_ls):
                         y='Match Count', 
                         color="Team_name",
                         barmode="group", 
-                        color_discrete_map={team_1: "#55efc4",
-                                            team_2: "#e84393"})
+                        color_discrete_map={team_1: "#1aa3ff",
+                                            team_2: "#ff471a"})
     change_size(fig , 25)
     return fig
 
@@ -125,8 +125,8 @@ def player_match_season(team_1, team_2, cleaner_obj, season_ls):
                         y='Match Count', 
                         color="Team_name",
                         barmode="group", 
-                        color_discrete_map={team_1: "#55efc4",
-                                            team_2: "#e84393"})
+                        color_discrete_map={team_1: "#1aa3ff",
+                                            team_2: "#ff471a"})
     change_size(fig , 25)
     return fig
 
@@ -156,8 +156,8 @@ def win_visu_by_toss(team_name, cleaner_obj, season_ls):
                 title=team_name,
                 hole=0.3, 
                 color="Decision", 
-                color_discrete_map={"Batting": "#e84393", 
-                                    "Fielding": "#434343"})
+                color_discrete_map={"Batting": "#1aa3ff", 
+                                    "Fielding": "#ff471a"})
     change_size(fig , 25)
     return fig
 
