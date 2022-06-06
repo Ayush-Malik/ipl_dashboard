@@ -9,12 +9,14 @@ season_ls = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2
 #       Section - 1
 #  -------------------------
 ## Cleaning and manipulation of data 
+def change_size(fig , size):
+    fig.update_layout(font={'size': size})
 class Cleaner:
     new_df = None
     old_df = None
     
     def __init__(self) -> None:
-        matches = pd.read_csv(r'E:\5th_sem_proj\ipl_dashboard\matches.csv')
+        matches = pd.read_csv(r'C:\Users\DELL\Desktop\ipl\ipl_dashboard\matches.csv')
         matches.replace(to_replace=['Delhi Daredevils'], value=['Delhi Capitals'], inplace=True)
         
         self.old_df = matches
@@ -65,7 +67,8 @@ def winningPercentage(team_1, team_2, cleaner_obj, season_ls):
                     values='Win %age', hole=0.3,
                     color="Team_Name",
                     color_discrete_map={team_1: "#e84393",
-                                        team_2: "#434343"})
+                                        team_2: "#434343"},)
+    change_size(fig , 25)
     return fig
 
 
@@ -95,7 +98,7 @@ def team_in_most_season(team_1, team_2, cleaner_obj, season_ls):
                         barmode="group", 
                         color_discrete_map={team_1: "#55efc4",
                                             team_2: "#e84393"})
-
+    change_size(fig , 25)
     return fig
 
 def player_match_season(team_1, team_2, cleaner_obj, season_ls):
@@ -124,7 +127,7 @@ def player_match_season(team_1, team_2, cleaner_obj, season_ls):
                         barmode="group", 
                         color_discrete_map={team_1: "#55efc4",
                                             team_2: "#e84393"})
-
+    change_size(fig , 25)
     return fig
 
 def win_visu_by_toss(team_name, cleaner_obj, season_ls):
@@ -155,6 +158,7 @@ def win_visu_by_toss(team_name, cleaner_obj, season_ls):
                 color="Decision", 
                 color_discrete_map={"Batting": "#e84393", 
                                     "Fielding": "#434343"})
+    change_size(fig , 25)
     return fig
 
 

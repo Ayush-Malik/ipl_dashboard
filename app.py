@@ -16,7 +16,7 @@ dic = {'Sunrisers Hyderabad': 'SRH', 'Kolkata Knight Riders': 'KKR',
 
 st.set_page_config(layout="wide")
 
-st.markdown("<h1 style='text-align: center;'>IPL Dashboard</h1>",
+st.markdown("<marquee ><h1 style='text-align: center; font-size : 70px; text-decoration: underline;'>IPL Dashboard</h1> </marquee>",
             unsafe_allow_html=True)
 
 st.text("")
@@ -82,39 +82,19 @@ components.html(
        height=300,
 )
 
-container1 = st.container()
-col1, col2 = st.columns(2)
-
-with container1:
-       with col1:
-              # ---------------
-              # Pie Plot
-              st.markdown("<p style='text-align: center;'>Winning percentage between both teams</p>",
-                     unsafe_allow_html=True)
-              st.plotly_chart(winningPercentage(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
-              st.text("")
-              st.text("")
-       
-       with col2:
-              # -----------------
-              # histogram plot
-              st.markdown("<p style='text-align: center;'>Match Count in each Season</p>",
-                     unsafe_allow_html=True)
-              st.plotly_chart(team_in_most_season(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
-              st.text("")
-              st.text("")
 
 # ------------------
 # histogram
-st.markdown("<p style='text-align: center;'>Most player of the matches</p>",
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Most player of the matches</p>",
             unsafe_allow_html=True)
 st.plotly_chart(player_match_season(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
-st.text("")
-st.text("")
+for i in range(12):
+       st.text("")
+
 
 # ---------------------
 # pie
-st.markdown("<p style='text-align: center;'>Winning percentage by toss decision</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning percentage by toss decision</p>", unsafe_allow_html=True)
 container2 = st.container()
 col3, col4 = st.columns(2)
 
@@ -124,5 +104,23 @@ with container2:
        with col4:
               st.plotly_chart(win_visu_by_toss(dic[team2], cleaner_obj, season), use_container_width=True)
 
+for i in range(12):
+       st.text("")
+
+
+# -----------------
+# histogram plot
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Match Count in each Season</p>",
+       unsafe_allow_html=True)
+st.plotly_chart(team_in_most_season(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
+
+for i in range(12):
+       st.text("")
+
+# ---------------
+# Pie Plot
+st.markdown("<p style='text-align: center; font-size:60px; text-decoration: underline;'>Winning percentage between both teams</p>",
+       unsafe_allow_html=True)
+st.plotly_chart(winningPercentage(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
 st.text("")
 st.text("")
