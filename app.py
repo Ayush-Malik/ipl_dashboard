@@ -2,6 +2,138 @@ import streamlit as st
 import streamlit.components.v1 as components
 from functions import Cleaner, Cards, winningPercentage, team_in_most_season, player_match_season, win_visu_by_toss
 
+from streamlit.components.v1 import html
+st.set_page_config(layout="wide")
+
+# creating news button
+news = st.button("News")
+
+
+# news will be displayed when button is clicked
+if(news):
+
+    # Defining javascript
+    my_js = """
+    //fetch api
+
+    function getdata(){
+        //Initializing the api parameters
+           const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': {api_key},
+                    'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
+                }
+            };
+
+        url='https://cricbuzz-cricket.p.rapidapi.com/news/v1/index'
+        fetch(url,options).then((response)=>{
+            return response.json();
+
+        }).then((data)=>{
+            let newsAccordian = document.getElementById("newsAccordian")
+            let articles=data.storyList;
+          
+            let html = ""
+            articles.forEach(function (element, index) {
+    
+                if(element.story!=undefined){
+                        let news = ` <div class="searchAccordian accordion-item"> <h2 class="accordion-header" id="heading${index}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
+                        <span><strong>News ${index+1}: &nbsp;</strong> ${element.story.hline}</span>
+                        </button>
+                    </h2>
+                    <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#newsAccordian">
+                        <div class="accordion-body">
+                        <p>${element.story.intro}</p>
+                        </div>
+                    </div>
+                    </div>`
+
+            html+=news
+            }
+            });
+            newsAccordian.innerHTML=html
+
+        })
+    }
+
+    getdata()
+
+
+
+    """
+
+    # Wrap the javascript as html code
+    my_html = """
+
+    <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+        <!-- Internal CSS -->
+        <style>
+           
+            .container {
+                background-color: #212529;
+
+            }
+
+            .accordion-body {
+                background-color: #adadad;
+            }
+
+            .footer{
+                width: auto;
+                height: 30px;
+                /* border: 2px solid black; */
+                color: cornsilk;
+                text-align: center;
+                background-color:#212529 ;
+            }
+
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+            crossorigin="anonymous"></script>
+
+
+        """f"<script>{my_js}</script>""""
+    
+
+        <title>NEWS UPDATE</title>
+    </head>
+
+    <body>
+
+
+
+        <!-- Badge started -->
+        <marquee behavior="alternate"><h3><strong>Breaking</strong> <span class="badge bg-secondary my-2">News</span></h3></marquee>
+        <!-- Badge Ended -->
+
+        <div class="container my-2">
+            <div class="accordion" id="newsAccordian">
+            </div>
+        </div>
+
+    </body>
+
+    """
+
+    # Executing
+    st.title("Latest News Updates")
+    html(my_html, height=700)
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 # Basic Initialization
 cleaner_obj = Cleaner()
 cleaner_obj.clean_inconsistent_teams()
@@ -14,7 +146,7 @@ dic = {'Sunrisers Hyderabad': 'SRH', 'Kolkata Knight Riders': 'KKR',
        'Rajasthan Royals': 'RR', 'Delhi Capitals': 'DC'
        }
 
-st.set_page_config(layout="wide")
+
 
 st.markdown("<marquee ><h1 style='text-align: center; font-size : 70px; text-decoration: underline;'>IPL Dashboard</h1> </marquee>",
             unsafe_allow_html=True)
@@ -29,6 +161,7 @@ season_labels = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 201
 team1 = st.sidebar.selectbox("Team-1", dic.keys())
 team2 = st.sidebar.selectbox("Team-2", dic.keys(), index=1)
 season = st.sidebar.multiselect("Seasons", season_labels, season_labels)
+
 
 card_obj = Cards(cleaner_obj, season)
 total_matches_one = card_obj.total_matches(dic[team1])
@@ -125,3 +258,14 @@ st.markdown("<p style='text-align: center; font-size:60px; text-decoration: unde
 st.plotly_chart(winningPercentage(dic[team1], dic[team2], cleaner_obj, season), use_container_width=True)
 st.text("")
 st.text("")
+
+
+
+
+
+
+
+
+
+
+
